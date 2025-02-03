@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sympy import symbols, limit, oo
+
+# Define the variable for the function
+x = symbols('x')
+
+# Define the function f(x) = (x^2 - 10) / (x - 9)
+function = (x**2 - 10) / (x - 9)
+
+# Identify the vertical asymptote by checking when the denominator becomes zero
+vertical_asymptote_x = 9  # x = 9 is a singularity (denominator = 0)
+vertical_asymptote_y = np.linspace(-100, 100, 400)  # Define the y-values for the vertical asymptote
+
+# Calculate the limits for the inclined asymptote (oblique asymptote)
+# The asymptote is in the form y = kx + b, where:
+# k = lim (f(x) / x) as x → ±∞
+limit_fx_over_x = limit(function / x, x, oo)
+
+# b = lim (f(x) - kx) as x → ±∞
+limit_fx_minus_limit_fx_over_x_times_x = limit(function - limit_fx_over_x * x, x, oo)
+
+# Generate x values for plotting, excluding x = 9 to avoid division by zero
+x_values = np.linspace(-20, 8.9, 400)  # Left of x = 9
+x_values = np.concatenate((x_values, np.linspace(9.1, 20, 400)))  # Right of x = 9
+
+# Compute corresponding y values for the function
+y_values = (x_values**2 - 10) / (x_values - 9)
+
+# Compute corresponding y values for the inclined asymptote using calculated limits
+inclined_asymptote_y = limit_fx_over_x * x_values + limit_fx_minus_limit_fx_over_x_times_x
+
+# Create the plot
+plt.figure(figsize=(10, 6))
+plt.plot(x_values, y_values, label='Function: $f(x) = \\frac{x^2 - 10}{x - 9}$', color='b')
+
+# Plot vertical asymptote at x = 9
+plt.plot(vertical_asymptote_x * np.ones_like(vertical_asymptote_y), vertical_asymptote_y, '--', 
+         label='Vertical Asymptote: $x = 9$', color='r')
+
+# Plot inclined asymptote
+plt.plot(x_values, inclined_asymptote_y, '--', label='Inclined Asymptote', color='g')
+
+# Set labels, title, and grid
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Plot of the Function with Asymptotes')
+plt.grid(True)
+plt.legend()
+plt.ylim(-100, 100)  # Adjust y-axis limits for better visualization
+plt.show()
