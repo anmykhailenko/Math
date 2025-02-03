@@ -1,0 +1,40 @@
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Define the non-homogeneous differential equation for the spring-mass system
+# x[0] represents displacement (x), and x[1] represents velocity (dx/dt)
+def spring_mass_system(x, t, m, b, k, F):
+    # dx/dt = velocity, d²x/dt² = acceleration
+    return [x[1], (1/m)*(F(t) - b*x[1] - k*x[0])]
+
+# Define the external force function (sinusoidal force)
+def external_force(t):
+    # Force = 5 * sin(t)
+    return 5 * np.sin(t)
+
+# Set system parameters
+m = 1.0  # mass in kg
+b = 0.5  # damping coefficient in N*s/m
+k = 10.0  # spring constant in N/m
+
+# Set time points for solution
+# Time vector from 0 to 10 seconds with 1000 points
+t = np.linspace(0, 10, 1000)
+
+# Solve the non-homogeneous differential equation using odeint
+# Initial conditions: displacement and velocity both 0 (starting at rest)
+solution = odeint(spring_mass_system, [0.0, 0.0], t, args=(m, b, k, external_force))
+
+# Extract displacement (x) from the solution (first column)
+displacement = solution[:, 0]
+
+# Plot the solution (displacement over time)
+plt.figure(figsize=(8, 5))
+plt.plot(t, displacement, label='Displacement (x)')
+plt.title('Spring-Mass System with External Force')
+plt.xlabel('Time (s)')
+plt.ylabel('Displacement (m)')
+plt.legend()
+plt.grid(True)
+plt.show()
