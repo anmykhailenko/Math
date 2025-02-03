@@ -1,0 +1,34 @@
+class Quaternion:
+    # Constructor to initialize quaternion with real part (w) and imaginary parts (x, y, z)
+    def __init__(self, w, x, y, z):
+        self.w = w  # Real part
+        self.x = x  # i component
+        self.y = y  # j component
+        self.z = z  # k component
+
+    # Define multiplication for quaternions (Hamilton product)
+    def __mul__(self, other):
+        # Hamilton product formula for quaternion multiplication
+        w = self.w * other.w - self.x * other.x - self.y * other.y - self.z * other.z
+        x = self.w * other.x + self.x * other.w + self.y * other.z - self.z * other.y
+        y = self.w * other.y - self.x * other.z + self.y * other.w + self.z * other.x
+        z = self.w * other.z + self.x * other.y - self.y * other.x + self.z * other.w
+        return Quaternion(w, x, y, z)
+
+    # String representation of the quaternion for easy printing
+    def __str__(self):
+        return f"{self.w} + {self.x}i + {self.y}j + {self.z}k"
+
+# Example usage:
+if __name__ == "__main__":
+    # Creating two quaternion objects
+    q1 = Quaternion(1, 2, 3, 4)  # Quaternion 1: 1 + 2i + 3j + 4k
+    q2 = Quaternion(5, 6, 7, 8)  # Quaternion 2: 5 + 6i + 7j + 8k
+
+    # Printing the quaternions
+    print("Quaternion 1:", q1)
+    print("Quaternion 2:", q2)
+
+    # Multiply the quaternions
+    result = q1 * q2  # Perform quaternion multiplication
+    print("Result of multiplication:", result)
