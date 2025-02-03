@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import odeint
+
+# Set the time points for which you want the solution
+# Time vector from 0 to 50 seconds with 1000 points
+t = np.linspace(0, 50, 1000)
+
+# Plot the displacement x(t) using the solved A and B constants
+# The solution is a sum of exponentially decaying terms and oscillatory terms
+x_solution = np.exp(-0.1*t) * (0.1*np.cos(3.2 * t) + 0.0031 * np.sin(3.2 * t)) + 0.38*np.cos(2*t) - 1.92*np.sin(2*t)
+
+# Create a figure for the plot with specified size
+plt.figure(figsize=(12, 6))
+
+# Plot the displacement x(t) as a function of time
+plt.plot(t, x_solution, label='x(t)')
+
+# Set the labels for the axes
+plt.xlabel('Time (s)')
+plt.ylabel('Displacement (m)')
+
+# Set the x-axis limit from 0 to 50 seconds
+plt.xlim(0, 50)
+
+# Add a legend to the plot
+plt.legend()
+
+# Set the title of the plot
+plt.title('Displacement x(t) over time')
+
+# Enable the grid for better visualization
+plt.grid(True)
+
+# Display the plot
+plt.show()
