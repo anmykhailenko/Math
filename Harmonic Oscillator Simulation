@@ -1,1 +1,54 @@
 import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+# Define the differential equation for a damped harmonic oscillator
+def damped_harmonic_oscillator(y, t, m, c, k):
+    """
+    Computes the derivatives for the damped harmonic oscillator system.
+    
+    Parameters:
+    y : list
+        A list where y[0] is displacement and y[1] is velocity.
+    t : float
+        Time variable.
+    m : float
+        Mass of the oscillator.
+    c : float
+        Damping coefficient.
+    k : float
+        Spring constant.
+    
+    Returns:
+    list : Derivatives [velocity, acceleration].
+    """
+    return [y[1], -(c/m)*y[1] - (k/m)*y[0]]
+
+# Set initial conditions: y(0) = 2.0 (initial displacement), y'(0) = 0.0 (initial velocity)
+initial_conditions = [2.0, 0.0]
+
+# Define physical parameters
+m = 1.0   # Mass (kg)
+c = 0.5   # Damping coefficient (N·s/m)
+k = 10.0  # Spring constant (N/m)
+
+# Define time points for simulation
+t = np.linspace(0, 10, 1000)  # Simulate from t = 0 to 10 seconds with 1000 time steps
+
+# Solve the system using odeint from SciPy
+solution = odeint(damped_harmonic_oscillator, initial_conditions, t, args=(m, c, k))
+
+# Extract displacement (position over time) from the solution
+
+displacement = solution[:, 0]
+
+# Plot the results
+plt.figure(figsize=(8, 5))
+plt.plot(t, displacement, label='Displacement (y)', color='b')
+plt.title('Damped Harmonic Oscillator')
+plt.xlabel('Time (s)')
+plt.ylabel('Displacement (m)')
+plt.legend()
+plt.grid(True)
+plt.show()
+
