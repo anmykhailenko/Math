@@ -1,0 +1,46 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_cubic_bezier(ax, control_points, color, label):
+    # Create Bezier curve
+    t = np.linspace(0, 1, 100)
+    curve = np.array([(1 - tt) ** 3 * control_points[0] +
+                      3 * (1 - tt) ** 2 * tt * control_points[1] +
+                      3 * (1 - tt) * tt ** 2 * control_points[2] +
+                      tt ** 3 * control_points[3] for tt in t])
+
+    # Plot the curve
+    ax.plot(curve[:, 0], curve[:, 1], color, label=label)
+
+    # Plot control polygon
+    ax.plot(control_points[:, 0], control_points[:, 1], 'k--', label='Control Polygon')
+
+# Set of control points for four different curves
+control_points_set1 = np.array([[0, 0], [1, 2], [3, -2], [4, 0]])
+control_points_set2 = np.array([[0, 0], [1, 3], [3, 3], [4, 4]])
+control_points_set3 = np.array([[0, 0], [1, 1], [3, -1], [0, 0]])
+control_points_set4 = np.array([[0, 0], [1, 0], [3, -1], [4, 0]])
+
+# Create subplots
+fig, axs = plt.subplots(2, 2, figsize=(10, 10))
+
+# Plot each curve on a different chart
+plot_cubic_bezier(axs[0, 0], control_points_set1, 'r-', 'Curve 1')
+plot_cubic_bezier(axs[0, 1], control_points_set2, 'g-', 'Curve 2')
+plot_cubic_bezier(axs[1, 0], control_points_set3, 'b-', 'Curve 3')
+plot_cubic_bezier(axs[1, 1], control_points_set4, 'y-', 'Curve 4')
+
+# Plot control points
+for ax, control_points in zip(axs.flatten(), [control_points_set1, control_points_set2, control_points_set3, control_points_set4]):
+    ax.scatter(control_points[:, 0], control_points[:, 1], c='black', marker='o')
+
+# Set plot properties
+for ax in axs.flatten():
+    ax.set_title('Cubic Bezier Curve with Control Polygon')
+    ax.set_xlabel('X-axis')
+    ax.set_ylabel('Y-axis')
+    ax.legend()
+    ax.grid(True)
+
+plt.tight_layout()
+plt.show()
